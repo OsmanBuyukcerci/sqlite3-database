@@ -1,18 +1,22 @@
 import sqlite3 as sql
 from time import sleep
 import sys
+import os
 
 conn = sql.connect('students.db')
 cur = conn.cursor()
 
-print('\nÖğrenci veritabanına bağlantı kuruldu.\n\n')
-sleep(1.5)
+cur.execute("""CREATE TABLE IF NOT EXISTS STUDENTS(
+    name text,
+    lastname text,
+    age integer
+)""")
 
 def menu():
-    print('\t1-Öğrenci ekle\n')
-    print('\t2-Öğrenci sil\n')
-    print('\t3-Öğrenci tablosunu yazdır\n')
-    print('\t4-Çıkış\n')
+    print('1-Öğrenci ekle')
+    print('2-Öğrenci sil')
+    print('3-Öğrenci tablosunu yazdır')
+    print('4-Çıkış')
     
 def insert(name, lastname, age):
     add_command = """INSERT INTO STUDENTS VALUES {} """
@@ -76,82 +80,92 @@ def exit():
     sys.exit()
     
 
+
+clear = lambda: os.system('cls')
+print('Öğrenci veritabanına bağlantı kuruldu.')
+sleep(1)
+clear()
+
 while(True):
-    print('\n')
     menu()
-    menuChoice = int(input('Lütfen yapmak istediğiniz işlemin yanındaki rakamı giriniz: '))
     print('\n')
+    menuChoice = int(input('Lütfen yapmak istediğiniz işlemin yanındaki rakamı giriniz: '))
+    clear()
     match(menuChoice):
         case 1:
-            sleep(1)
-            info = str(input('\tLütfen öğrencinin isim soyisim ve yaşını aralarında birer boşluk olacak şekilde giriniz: '))
+            info = str(input('Lütfen öğrencinin isim soyisim ve yaşını aralarında birer boşluk olacak şekilde giriniz: '))
             info_split = info.split(' ')
             name = info_split[0]
             lastname = info_split[1]
             age = int(info_split[2])
             insert(name, lastname, age)
-            print('\t%s %s [%d] veritabanına başarıyla kaydedildi.\n\n'%(name, lastname, age))
+            print('%s %s [%d] veritabanına başarıyla kaydedildi.'%(name, lastname, age))
             sleep(1.5)
+            clear()
         case 2:
-            sleep(1)
-            print('\t1-Tüm bilgilere göre sil\n')
-            print('\t2-İsme göre sil\n')
-            print('\t3-Soyisme göre sil\n')
-            print('\t4-Yaşa göre sil\n')
+            print('1-Tüm bilgilere göre sil')
+            print('2-İsme göre sil')
+            print('3-Soyisme göre sil')
+            print('4-Yaşa göre sil\n')
             deleteChoice = int(input('Seçiminizi giriniz: '))
-            print('\n')
+            clear()
             if deleteChoice == 1:
-                info = str(input('\tSilmek istediğiniz öğrencinin ismini soyismini ve yaşını aralarında birer boşluk olacak şekilde giriniz: '))
+                info = str(input('Silmek istediğiniz öğrencinin ismini soyismini ve yaşını aralarında birer boşluk olacak şekilde giriniz: '))
                 info_split = info.split(' ')
                 name = info_split[0]
                 lastname = info_split[1]
                 age = int(info_split[2])
                 delete_Info(name, lastname, age)
-                print('\t%s %s [%d] veritabanından başarıyla silindi.\n\n'%(name, lastname, age))
+                print('%s %s [%d] veritabanından başarıyla silindi.'%(name, lastname, age))
                 sleep(1.5)
+                clear()
             elif deleteChoice == 2:
-                name = str(input('\tSilmek istediğiniz öğrencinin ismini giriniz: '))
+                name = str(input('Silmek istediğiniz öğrencinin ismini giriniz: '))
                 delete_Name(name)
-                print('\t%s isimli öğrenci(ler) veritabanından başarıyla silindi.'%(name))
+                print('%s isimli öğrenci(ler) veritabanından başarıyla silindi.'%(name))
                 sleep(1.5)
+                clear()
             elif deleteChoice == 3:
                 lastname = str(input('Silmek istediğiniz öğrencinin soyismini giriniz: '))
                 delete_Lastname(lastname)
-                print('\t%s soyisimli öğrenci(ler) veritabanından başarıyla silindi.\n\n'%(lastname))
+                print('%s soyisimli öğrenci(ler) veritabanından başarıyla silindi.'%(lastname))
                 sleep(1.5)
-        
+                clear()
             elif deleteChoice == 4:
-                print('\t1-Yaşa göre sil\n')
-                print('\t2-Herhangi bir "x" yaşının altındakileri sil\n')
-                print('\t3-Herhangi bir "x" yaşının üstündekileri sil\n')
+                print('1-Yaşa göre sil\n')
+                print('2-Herhangi bir "x" yaşının altındakileri sil')
+                print('3-Herhangi bir "x" yaşının üstündekileri sil\n')
                 ageChoice = int(input('Seçiminizi giriniz: '))
-                print('\n')
+                clear()
                 if ageChoice == 1:
-                    age_D = int(input('\tLütfen yaş giriniz: '))
+                    age_D = int(input('Lütfen yaş giriniz: '))
                     delete_Age(age_D)
-                    print('\t%d yaşlı öğrenci(ler) veritabanından başarıyla silindi.'%(age_D))
+                    print('%d yaşlı öğrenci(ler) veritabanından başarıyla silindi.'%(age_D))
                     sleep(1.5)
+                    clear()
                 if ageChoice == 2:
-                    age_D = int(input('\tLütfen yaş giriniz: '))
+                    age_D = int(input('Lütfen yaş giriniz: '))
                     delete_Age_below(age_D)
-                    print('\t%d yaşından küçük öğrenci(ler) veritabanından başarıyla silindi.'%(age_D))
+                    print('%d yaşından küçük öğrenci(ler) veritabanından başarıyla silindi.'%(age_D))
                     sleep(1.5)
+                    clear()
                 if ageChoice == 3:
-                    age_D = int(input('\tLütfen yaş giriniz: '))
+                    age_D = int(input('Lütfen yaş giriniz: '))
                     delete_Age_above(age_D)
-                    print('\t%d yaşından büyük öğrenci(ler) veritabanından başarıyla silindi.'%(age_D))
+                    print('%d yaşından büyük öğrenci(ler) veritabanından başarıyla silindi.'%(age_D))
                     sleep(1.5)
+                    clear()
             else:
                 print('HATALI GİRİŞ YAPILDI!')
                 sleep(1.5)
+                clear()
         case 3:
-            sleep(1)
-            print('\t1-İsim soyisim ve yaşları yazdır\n')
-            print('\t2-İsimleri yazdır\n')
-            print('\t3-Soyisimleri yazdır\n')
-            print('\t4- Yaşları yazdır\n')
+            print('1-İsim soyisim ve yaşları yazdır')
+            print('2-İsimleri yazdır')
+            print('3-Soyisimleri yazdır')
+            print('4- Yaşları yazdır\n')
             dataChoice = int(input('Seçiminizi giriniz: '))
-            print('\n')
+            clear()
             loopBreak = None
             while(loopBreak != 5):
                 if dataChoice == 1:
@@ -165,13 +179,7 @@ while(True):
                 else:
                     print('HATALI GİRİŞ YAPILDI!')
                     sleep(1.5)
-                loopBreak = int(input('\n\tDevam etmek için "5" giriniz: '))
+                loopBreak = int(input('\nDevam etmek için "5" giriniz: '))
+                clear()
         case 4:
-            exit()
-                
-                
-            
-            
-    
-            
-                
+            exit()   
